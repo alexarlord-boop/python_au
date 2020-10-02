@@ -2,7 +2,7 @@
 + [56. Merge Intervals] [merge-intervals]
 + [57. Insert Interval] [insert-interval]
 
-## 435. Non-overlapping Intervals
+## Non-overlapping Intervals
 
 ```python
 intervals.sort(key=lambda interval: interval[0])
