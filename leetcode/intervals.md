@@ -1,3 +1,0 @@
-# INTERVALS
-
-## Insert interval
