@@ -13,9 +13,15 @@ class Point:
 
 class Triangle:
     def __init__(self, a, b, c):
+        self.a_crds = a
+        self.b_crds = b
+        self.c_crds = c
         self.a = sqrt((b.x - c.x) ** 2 + (b.y - c.y) ** 2)
         self.b = sqrt((a.x - c.x) ** 2 + (a.y - c.y) ** 2)
         self.c = sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2)
+
+    def __str__(self):
+        return f"{self.a_crds.x} {self.a_crds.y} {self.b_crds.x} {self.b_crds.y} {self.c_crds.x} {self.c_crds.y}"
 
     def is_triangle(self):
         return (self.a < self.b + self.c) and (self.b < self.c + self.a) and (self.c < self.a + self.b)
@@ -61,7 +67,6 @@ def write_data(filename, data):
     with open(filename, 'w') as f:
         if mx_sq != 0:
             f.write(str(triangle))
-
 
 
 def main(src, dst):
