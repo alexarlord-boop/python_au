@@ -57,12 +57,14 @@ def read_data(filename):
 
 def write_data(filename, data):
     mx_sq = 0
+    res_triangle = None
     for line in data:
         triangle = Triangle(Point(line[0], line[1]),
                             Point(line[2], line[3]),
                             Point(line[4], line[5]))
         if triangle.square() > mx_sq:
             mx_sq = triangle.square()
+            res_triangle = triangle
 
     with open(filename, 'w') as f:
         if mx_sq != 0:
@@ -71,7 +73,7 @@ def write_data(filename, data):
 
 def main(src, dst):
     src = read_data(src)
-    print(write_data(dst, src))
+    write_data(dst, src)
 
 
 if __name__ == "__main__":
