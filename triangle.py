@@ -28,6 +28,7 @@ class Triangle():
             p = (self.a + self.b + self.c) / 2
             s = sqrt(p * (p - self.a) * (p - self.b) * (p - self.c))
             return s
+        return -1
 
 
 def read_data(filename):
@@ -49,15 +50,24 @@ def read_data(filename):
     return res_data
 
 
-def write_data(filename):
-    pass
+def write_data(filename, data):
+    mx_sq = 0
+    for line in data:
+        triangle = Triangle(Point(line[0], line[1]),
+                            Point(line[2], line[3]),
+                            Point(line[4], line[5]))
+        if triangle.square() > mx_sq:
+            mx_sq = triangle.square()
+    return mx_sq
+
 
 
 def main(src, dst):
     src = read_data(src)
-    tr = Triangle(Point(0, 0), Point(0, 3), Point(3, 0))
-    print(tr.a, tr.b, tr.c)
-    print(tr.square())
+    print(write_data(dst, src))
+    #tr = Triangle(Point(0, 0), Point(0, 3), Point(3, 0))
+    # print(tr.a, tr.b, tr.c)
+    # print(tr.square())
 
 
 if __name__ == "__main__":
