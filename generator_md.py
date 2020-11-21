@@ -32,8 +32,8 @@ def read_txt(filename):
 
 def read_md(filename):
     data = []
-    if os.path.exists(filename):
-        f = open(filename)
+    if os.path.exists(f"leetcode/{filename}"):
+        f = open(f"leetcode/{filename}")
         data = f.read()
         f.close()
     else:
@@ -55,7 +55,7 @@ def prepare_data_to_write(md_obj, data):
 
 def write_to_file(filename, data):
     header = f"# {filename.split('.')[0].upper()}\n\n"
-    with open(filename, "w") as f:
+    with open(f"leetcode/{filename}", "w") as f:
         if header not in data[0]:
             f.write(header)
         f.write(f"{data[0]}")
