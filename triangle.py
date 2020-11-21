@@ -41,24 +41,27 @@ class TaskSolver:
     def __init__(self, src, dst):
         self.src = src
         self.dst = dst
+        self.raw_data = list()
         self.data = list()
         self.mx_square = 0
-        self.result_triangle = None
+        self.res_triangle = None
 
     def read_data(self):
         with open(self.src) as f:
-            data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
-            k = len(data)
-            for i in range(k):
-                is_num_row = True
-                if len(data[i]) == 6:
-                    for j in range(6):
-                        try:
-                            data[i][j] = float(data[i][j])
-                        except ValueError:
-                            is_num_row = False
-                    if is_num_row:
-                        self.data.append(data[i])
+            self.raw_data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
+
+    def parse_data(self):
+        k = len(self.raw_data)
+        for i in range(k):
+            is_num_row = True
+            if len(self.raw_data[i]) == 6:
+                for j in range(6):
+                    try:
+                        self.raw_data[i][j] = float(self.raw_data[i][j])
+                    except ValueError:
+                        is_num_row = False
+                if is_num_row:
+                    self.data.append(self.raw_data[i])
         return self.data
 
     def find_largest_triangle(self):
@@ -80,6 +83,7 @@ class TaskSolver:
 def main(src, dst):
     task_solver = TaskSolver(src, dst)
     task_solver.read_data()
+    print(task_solver.parse_data())
     task_solver.find_largest_triangle()
     task_solver.write_data()
 
