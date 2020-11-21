@@ -11,12 +11,21 @@ class Triangle():
 
 def read_data(filename):
     data = list()
+    res_data = list()
     with open(filename) as f:
         data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
         k = len(data)
         for i in range(k):
-            data[i] = list(map(int, data[i]))
-    return data
+            is_num_row = True
+            if len(data[i]) == 6:
+                for j in range(6):
+                    try:
+                        data[i][j] = float(data[i][j])
+                    except ValueError:
+                        is_num_row = False
+                if is_num_row:
+                    res_data.append(data[i])
+    return res_data
 
 
 def write_data(filename):
