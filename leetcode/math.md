@@ -1,6 +1,7 @@
 # MATH
 
 + [Palindrome Number](#palindrome-number)
++ [Sqrt(x)](#sqrtx)
 <!---->
 ## Palindrome Number
 
@@ -16,5 +17,14 @@ if x == rev:
     return True
 else:
     return False
+```
+
+## Sqrt(x)
+
+https://leetcode.com/problems/sqrtx/
+
+```python
+return int(x ** 0.5)
+
 ```
 
