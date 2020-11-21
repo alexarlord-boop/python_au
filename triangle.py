@@ -57,7 +57,11 @@ def write_data(filename, data):
                             Point(line[4], line[5]))
         if triangle.square() > mx_sq:
             mx_sq = triangle.square()
-    return mx_sq
+
+    with open(filename, 'w') as f:
+        if mx_sq != 0:
+            f.write(str(triangle))
+
 
 
 def main(src, dst):
