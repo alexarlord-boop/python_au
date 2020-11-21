@@ -1,4 +1,5 @@
 import sys
+from math import sqrt
 
 
 class Point():
@@ -6,7 +7,22 @@ class Point():
 
 
 class Triangle():
-    pass
+    def __init__(self, a, b, c):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    def is_triangle(self):
+        return (self.a < self.b + self.c) and (self.b < self.c + self.a) and (self.c < self.a + self.b)
+
+    def is_rb(self):
+        return (self.a == self.b) or (self.b == self.c) or (self.c == self.a)
+
+    def square(self):
+        if self.is_triangle() and self.is_rb():
+            p = (self.a + self.b + self.c) / 2
+            s = sqrt(p(p - self.a)(p - self.b)(p - self.c))
+            return s
 
 
 def read_data(filename):
@@ -41,4 +57,4 @@ if __name__ == "__main__":
     params = sys.argv
     main(params[1], params[2])
 
-#triangle.py in.txt out.txt
+# triangle.py in.txt out.txt
