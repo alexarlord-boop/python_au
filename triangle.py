@@ -61,13 +61,9 @@ def write_data(filename, data):
     return mx_sq
 
 
-
 def main(src, dst):
     src = read_data(src)
     print(write_data(dst, src))
-    #tr = Triangle(Point(0, 0), Point(0, 3), Point(3, 0))
-    # print(tr.a, tr.b, tr.c)
-    # print(tr.square())
 
 
 if __name__ == "__main__":
