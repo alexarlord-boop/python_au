@@ -3,14 +3,19 @@ from math import sqrt
 
 
 class Point():
-    pass
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __add__(self, other):
+        return (self.x + other.x, self.y + other.y)
 
 
 class Triangle():
     def __init__(self, a, b, c):
-        self.a = a
-        self.b = b
-        self.c = c
+        self.a = sqrt((b.x - c.x) ** 2 + (b.y - c.y) ** 2)
+        self.b = sqrt((a.x - c.x) ** 2 + (a.y - c.y) ** 2)
+        self.c = sqrt((b.x - a.x) ** 2 + (b.y - a.y) ** 2)
 
     def is_triangle(self):
         return (self.a < self.b + self.c) and (self.b < self.c + self.a) and (self.c < self.a + self.b)
@@ -21,7 +26,7 @@ class Triangle():
     def square(self):
         if self.is_triangle() and self.is_rb():
             p = (self.a + self.b + self.c) / 2
-            s = sqrt(p(p - self.a)(p - self.b)(p - self.c))
+            s = sqrt(p * (p - self.a) * (p - self.b) * (p - self.c))
             return s
 
 
@@ -50,7 +55,9 @@ def write_data(filename):
 
 def main(src, dst):
     src = read_data(src)
-    print(src)
+    tr = Triangle(Point(0, 0), Point(0, 3), Point(3, 0))
+    print(tr.a, tr.b, tr.c)
+    print(tr.square())
 
 
 if __name__ == "__main__":
