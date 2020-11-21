@@ -37,43 +37,51 @@ class Triangle:
         return -1
 
 
-def read_data(filename):
-    res_data = list()
-    with open(filename) as f:
-        data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
-        k = len(data)
-        for i in range(k):
-            is_num_row = True
-            if len(data[i]) == 6:
-                for j in range(6):
-                    try:
-                        data[i][j] = float(data[i][j])
-                    except ValueError:
-                        is_num_row = False
-                if is_num_row:
-                    res_data.append(data[i])
-    return res_data
+class TaskSolver:
+    def __init__(self, src, dst):
+        self.src = src
+        self.dst = dst
+        self.data = list()
+        self.mx_square = 0
+        self.result_triangle = None
 
+    def read_data(self):
+        with open(self.src) as f:
+            data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
+            k = len(data)
+            for i in range(k):
+                is_num_row = True
+                if len(data[i]) == 6:
+                    for j in range(6):
+                        try:
+                            data[i][j] = float(data[i][j])
+                        except ValueError:
+                            is_num_row = False
+                    if is_num_row:
+                        self.data.append(data[i])
+        return self.data
 
-def write_data(filename, data):
-    mx_sq = 0
-    res_triangle = None
-    for line in data:
-        triangle = Triangle(Point(line[0], line[1]),
-                            Point(line[2], line[3]),
-                            Point(line[4], line[5]))
-        if triangle.square() > mx_sq:
-            mx_sq = triangle.square()
-            res_triangle = triangle
+    def find_largest_triangle(self):
+        for line in self.data:
+            triangle = Triangle(Point(line[0], line[1]),
+                                Point(line[2], line[3]),
+                                Point(line[4], line[5]))
+            if triangle.square() > self.mx_square:
+                self.mx_square = triangle.square()
+                self.res_triangle = triangle
+        return self.mx_square, self.res_triangle
 
-    with open(filename, 'w') as f:
-        if mx_sq != 0:
-            f.write(str(triangle))
+    def write_data(self):
+        with open(self.dst, 'w') as f:
+            if self.mx_square != 0:
+                f.write(str(self.res_triangle))
 
 
 def main(src, dst):
-    src = read_data(src)
-    write_data(dst, src)
+    task_solver = TaskSolver(src, dst)
+    task_solver.read_data()
+    task_solver.find_largest_triangle()
+    task_solver.write_data()
 
 
 if __name__ == "__main__":
