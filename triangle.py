@@ -2,16 +2,16 @@ import sys
 from math import sqrt
 
 
-class Point():
+class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
 
     def __add__(self, other):
-        return (self.x + other.x, self.y + other.y)
+        return self.x + other.x, self.y + other.y
 
 
-class Triangle():
+class Triangle:
     def __init__(self, a, b, c):
         self.a = sqrt((b.x - c.x) ** 2 + (b.y - c.y) ** 2)
         self.b = sqrt((a.x - c.x) ** 2 + (a.y - c.y) ** 2)
@@ -32,7 +32,6 @@ class Triangle():
 
 
 def read_data(filename):
-    data = list()
     res_data = list()
     with open(filename) as f:
         data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
