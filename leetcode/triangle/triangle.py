@@ -1,19 +1,23 @@
 import sys
 
 
+class Point():
+    pass
+
+
 class Triangle():
     pass
 
 
-def read_data():
+def read_data(filename):
     pass
 
 
-def write_data():
+def write_data(filename):
     pass
 
 
-def main():
+def main(src, dst):
     pass
 
 
