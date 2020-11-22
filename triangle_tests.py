@@ -86,7 +86,7 @@ class TestTaskSolverMethods(unittest.TestCase):
         task_solver.parse_data()
         self.assertEqual(task_solver.find_largest_triangle(), 4.5)
 
-        task_solver = TaskSolver('in.txt', 'out.txt')
+        task_solver = TaskSolver('in2.txt', 'out.txt')
         task_solver.read_data()
         task_solver.parse_data()
         self.assertEqual(task_solver.find_largest_triangle(), 18)
