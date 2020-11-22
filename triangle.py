@@ -35,7 +35,7 @@ class Triangle:
         if self.is_triangle() and self.is_rb():
             p = (self.a + self.b + self.c) / 2
             s = sqrt(p * (p - self.a) * (p - self.b) * (p - self.c))
-            return s
+            return round(s, 3)
         return -1
 
 
