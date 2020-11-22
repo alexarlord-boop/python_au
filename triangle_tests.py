@@ -10,7 +10,24 @@ class TestPointAddMethod(unittest.TestCase):
 
 
 class TestTriangleMethods(unittest.TestCase):
-    pass
+    def test_is_triangle(self):
+        tr = Triangle(Point(0, 0), Point(0, 3), Point(4, 0))
+        self.assertTrue(tr.is_triangle())
+
+        tr = Triangle(Point(0, 0), Point(0, 3), Point(10, 0))
+        self.assertTrue(tr.is_triangle())
+
+        tr = Triangle(Point(0, 1.5), Point(3, 0), Point(1.5, 1))
+        self.assertTrue(tr.is_triangle())
+
+        tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
+        self.assertFalse(tr.is_triangle())
+
+        tr = Triangle(Point(0, 1.23), Point(0, 1.23), Point(0, 6))
+        self.assertFalse(tr.is_triangle())
+
+        tr = Triangle(Point(0, 0), Point(0, 0), Point(0, 0))
+        self.assertFalse(tr.is_triangle())
 
 
 class TestTaskSolverMethods(unittest.TestCase):
