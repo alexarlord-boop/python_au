@@ -27,7 +27,9 @@ class Triangle:
         return (self.a < self.b + self.c) and (self.b < self.c + self.a) and (self.c < self.a + self.b)
 
     def is_rb(self):
-        return (self.a == self.b) or (self.b == self.c) or (self.c == self.a)
+        if self.is_triangle():
+            return (self.a == self.b) or (self.b == self.c) or (self.c == self.a)
+        return False
 
     def square(self):
         if self.is_triangle() and self.is_rb():
@@ -86,7 +88,7 @@ class TaskSolver:
 def main(src, dst):
     task_solver = TaskSolver(src, dst)
     task_solver.read_data()
-    print(task_solver.parse_data())
+    task_solver.parse_data()
     task_solver.find_largest_triangle()
     task_solver.write_data()
 
