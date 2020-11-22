@@ -44,7 +44,6 @@ class TestTriangleMethods(unittest.TestCase):
 
         tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
         self.assertFalse(tr.is_rb())
-        print(tr.a, tr.b, tr.c)
 
 
 class TestTaskSolverMethods(unittest.TestCase):
