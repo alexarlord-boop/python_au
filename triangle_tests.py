@@ -64,6 +64,10 @@ class TestTriangleMethods(unittest.TestCase):
         tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
         self.assertEqual(tr.square(), -1)
 
+    def test_str(self):
+        tr = Triangle(Point(0, 0), Point(3, 0), Point(0, 3))
+        self.assertEqual(str(tr), "0 0 3 0 0 3")
+
 class TestTaskSolverMethods(unittest.TestCase):
     pass
 
