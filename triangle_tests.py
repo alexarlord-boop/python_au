@@ -53,7 +53,7 @@ class TestTriangleMethods(unittest.TestCase):
         self.assertEqual(tr.square(), 4.5)
 
         tr = Triangle(Point(0, 0), Point(10.1, 0), Point(0, 10.1))
-        self.assertEqual(tr.square(), 102.01)
+        self.assertEqual(tr.square(), 51.005)
 
         tr = Triangle(Point(0, 0), Point(0, 0), Point(0, 0))
         self.assertEqual(tr.square(), -1)
