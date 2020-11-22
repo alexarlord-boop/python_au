@@ -35,7 +35,7 @@ class Triangle:
         if self.is_triangle() and self.is_rb():
             p = (self.a + self.b + self.c) / 2
             s = sqrt(p * (p - self.a) * (p - self.b) * (p - self.c))
-            return s
+            return round(s, 3)
         return -1
 
 
@@ -75,7 +75,7 @@ class TaskSolver:
             if triangle.square() > self.mx_square:
                 self.mx_square = triangle.square()
                 self.res_triangle = triangle
-        return self.mx_square, self.res_triangle
+        return self.mx_square
 
     def write_data(self):
         with open(self.dst, 'w') as f:
@@ -90,6 +90,7 @@ def main(src, dst):
     task_solver.read_data()
     task_solver.parse_data()
     task_solver.find_largest_triangle()
+    print(task_solver.res_triangle.square())
     task_solver.write_data()
 
 
