@@ -68,8 +68,19 @@ class TestTriangleMethods(unittest.TestCase):
         tr = Triangle(Point(0, 0), Point(3, 0), Point(0, 3))
         self.assertEqual(str(tr), "0 0 3 0 0 3")
 
+
 class TestTaskSolverMethods(unittest.TestCase):
-    pass
+    def test_parse_data(self):
+        task_solver = TaskSolver('in.txt', 'out.txt')
+        task_solver.read_data()
+        self.assertEqual(task_solver.parse_data(), [[0, 3, 0, 4, 0, 0.07,],
+                                                    [0, 0, 0, 3, 3, 0]])
+
+        task_solver = TaskSolver('in2.txt', 'out.txt')
+        task_solver.read_data()
+        self.assertEqual(task_solver.parse_data(), [[0.0, 0.0, 0.0, 3.0, 3.0, 0.0]])
+
+
 
 
 if __name__ == '__main__':
