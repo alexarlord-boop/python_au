@@ -29,6 +29,23 @@ class TestTriangleMethods(unittest.TestCase):
         tr = Triangle(Point(0, 0), Point(0, 0), Point(0, 0))
         self.assertFalse(tr.is_triangle())
 
+    def test_is_rb(self):
+        tr = Triangle(Point(0, 0), Point(3, 0), Point(0, 3))
+        self.assertTrue(tr.is_rb())
+
+        tr = Triangle(Point(4.5, 4.5), Point(3, 0), Point(0, 3))
+        self.assertTrue(tr.is_rb())
+
+        tr = Triangle(Point(0, 0), Point(0, 0), Point(0, 0))
+        self.assertFalse(tr.is_rb())
+
+        tr = Triangle(Point(0, 1.23), Point(0, 1.23), Point(0, 6))
+        self.assertFalse(tr.is_rb())
+
+        tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
+        self.assertFalse(tr.is_rb())
+        print(tr.a, tr.b, tr.c)
+
 
 class TestTaskSolverMethods(unittest.TestCase):
     pass
