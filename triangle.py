@@ -75,7 +75,7 @@ class TaskSolver:
             if triangle.square() > self.mx_square:
                 self.mx_square = triangle.square()
                 self.res_triangle = triangle
-        return self.mx_square, self.res_triangle
+        return self.mx_square
 
     def write_data(self):
         with open(self.dst, 'w') as f:
