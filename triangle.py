@@ -90,6 +90,7 @@ def main(src, dst):
     task_solver.read_data()
     task_solver.parse_data()
     task_solver.find_largest_triangle()
+    print(task_solver.res_triangle.square())
     task_solver.write_data()
 
 
