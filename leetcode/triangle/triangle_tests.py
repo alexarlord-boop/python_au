@@ -1,5 +1,5 @@
 import unittest
-from triangle import Point, Triangle, TaskSolver
+from leetcode.triangle.triangle import Point, Triangle, TaskSolver
 
 
 class TestPointAddMethod(unittest.TestCase):
