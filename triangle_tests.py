@@ -45,6 +45,24 @@ class TestTriangleMethods(unittest.TestCase):
         tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
         self.assertFalse(tr.is_rb())
 
+    def test_square(self):
+        tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
+        self.assertEqual(tr.square(), -1)
+
+        tr = Triangle(Point(0, 0), Point(3, 0), Point(0, 3))
+        self.assertEqual(tr.square(), 4.5)
+
+        tr = Triangle(Point(0, 0), Point(10.1, 0), Point(0, 10.1))
+        self.assertEqual(tr.square(), 102.01)
+
+        tr = Triangle(Point(0, 0), Point(0, 0), Point(0, 0))
+        self.assertEqual(tr.square(), -1)
+
+        tr = Triangle(Point(0, 1.23), Point(0, 1.23), Point(0, 6))
+        self.assertEqual(tr.square(), -1)
+
+        tr = Triangle(Point(0, 1), Point(0, 3), Point(0, 6))
+        self.assertEqual(tr.square(), -1)
 
 class TestTaskSolverMethods(unittest.TestCase):
     pass
