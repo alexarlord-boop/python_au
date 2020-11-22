@@ -86,7 +86,7 @@ class TaskSolver:
 def main(src, dst):
     task_solver = TaskSolver(src, dst)
     task_solver.read_data()
-    print(task_solver.parse_data())
+    task_solver.parse_data()
     task_solver.find_largest_triangle()
     task_solver.write_data()
 
