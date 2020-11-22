@@ -49,6 +49,7 @@ class TaskSolver:
     def read_data(self):
         with open(self.src) as f:
             self.raw_data = list(map(lambda x: x.strip('\n').split(), f.readlines()))
+        return self.raw_data
 
     def parse_data(self):
         k = len(self.raw_data)
@@ -78,6 +79,8 @@ class TaskSolver:
         with open(self.dst, 'w') as f:
             if self.mx_square != 0:
                 f.write(str(self.res_triangle))
+                return str(self.res_triangle)
+            return 0
 
 
 def main(src, dst):
