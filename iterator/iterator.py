@@ -1,10 +1,7 @@
 class node:
     def __init__(self, val):
-        self.val = {"name": val[0], "group": val[1], "subgroup": val[2]}
+        self.val = val
         self.next = None
-
-    def __str__(self):
-        return f"Name: {self.val['name']} Group: {self.val['group']} Subgroup: {self.val['subgroup']}"
 
 
 class MyLinkedList:
@@ -28,10 +25,11 @@ class MyLinkedList:
     def printlist(self):
         for elem in self:
             print(elem)
+        self.counter = 0
 
     def get(self, index) -> int:
         if index < len(self.lst):
-            return f"{index}. " + str(self.lst[index])
+            return self.lst[index].val
         else:
             return -1
 
@@ -89,26 +87,29 @@ class MyLinkedList:
 
 
 if __name__ == "__main__":
-    ml = MyLinkedList()
-    ml.addAtHead(['A', 102, 2])
-    ml.addAtHead(['B', 102, 2])
-    ml.addAtHead(['C', 102, 1])
+    class Student:
+        def __init__(self, name, g, subg):
+            self.name = name
+            self.g = g
+            self.subg = subg
 
-    print(next(ml))
-    print(next(ml))
-    print(next(ml))
+        def __str__(self):
+            return f"{self.name} {self.g} {self.subg}"
 
-    ml = MyLinkedList()
-    ml.addAtHead(['aa', 102, 2])
-    ml.addAtHead(['bb', 102, 2])
-    ml.addAtHead(['cc', 102, 1])
 
-    for student in ml:
-        print(student)
+    std1 = Student('A', 101, 1)
+    std2 = Student('B', 101, 2)
+    std3 = Student('C', 101, 3)
 
-    ml = MyLinkedList()
-    ml.addAtHead(['-a-', 102, 2])
-    ml.addAtHead(['-b-', 102, 2])
-    ml.addAtHead(['-c-', 102, 1])
+    std_lst = MyLinkedList()
+    std_lst.addAtHead(std1)
+    std_lst.addAtTail(std2)
+    std_lst.addAtTail(std3)
 
-    ml.printlist()
+    std_lst.printlist()
+    # std_lst.printlist()
+
+    print(next(std_lst))
+    print(next(std_lst))
+    print(next(std_lst))
+
