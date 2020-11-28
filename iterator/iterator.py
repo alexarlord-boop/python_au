@@ -88,24 +88,27 @@ class MyLinkedList:
             self.limit -= 1
 
 
-# Your MyLinkedList object will be instantiated and called as such:
-# obj = MyLinkedList()
-# param_1 = obj.get(index)
-# obj.addAtHead(val)
-# obj.addAtTail(val)
-# obj.addAtIndex(index,val)
-# obj.deleteAtIndex(index)
+if __name__ == "__main__":
+    ml = MyLinkedList()
+    ml.addAtHead(['A', 102, 2])
+    ml.addAtHead(['B', 102, 2])
+    ml.addAtHead(['C', 102, 1])
 
-ml = MyLinkedList()
-ml.addAtHead(['A', 102, 2])
-ml.addAtHead(['B', 102, 2])
-ml.addAtHead(['C', 102, 1])
+    print(next(ml))
+    print(next(ml))
+    print(next(ml))
 
-# print(next(ml))
-# print(next(ml))
-# print(next(ml))
+    ml = MyLinkedList()
+    ml.addAtHead(['aa', 102, 2])
+    ml.addAtHead(['bb', 102, 2])
+    ml.addAtHead(['cc', 102, 1])
 
-# for student in ml:
-#     print(student)
+    for student in ml:
+        print(student)
 
-# ml.printlist()
+    ml = MyLinkedList()
+    ml.addAtHead(['-a-', 102, 2])
+    ml.addAtHead(['-b-', 102, 2])
+    ml.addAtHead(['-c-', 102, 1])
+
+    ml.printlist()
