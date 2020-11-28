@@ -1,34 +1,66 @@
+class node:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+
+
 class MyLinkedList:
 
     def __init__(self):
-        """
-        Initialize your data structure here.
-        """
+        self.head = None
+        self.lst = []
 
     def get(self, index: int) -> int:
-        """
-        Get the value of the index-th node in the linked list. If the index is invalid, return -1.
-        """
+        if index < len(self.lst):
+            return self.lst[index].val
+        else:
+            return -1
 
     def addAtHead(self, val: int) -> None:
-        """
-        Add a node of value val before the first element of the linked list. After the insertion, the new node will be the first node of the linked list.
-        """
+        new_node = node(val)
+        new_node.next = self.head
+        self.head = new_node
+        self.lst.insert(0, self.head)
 
     def addAtTail(self, val: int) -> None:
-        """
-        Append a node of value val to the last element of the linked list.
-        """
+        new_node = node(val)
+        if len(self.lst) == 0:
+            self.lst.append(new_node)
+            self.head = new_node
+            return
+
+        lastnode = self.lst[len(self.lst) - 1]
+        lastnode.next = new_node
+        self.lst.append(new_node)
 
     def addAtIndex(self, index: int, val: int) -> None:
-        """
-        Add a node of value val before the index-th node in the linked list. If index equals to the length of linked list, the node will be appended to the end of linked list. If index is greater than the length, the node will not be inserted.
-        """
+        new_node = node(val)
+        if index == 0:
+            self.lst.insert(index, new_node)
+            new_node.next = self.head
+            self.head = new_node
+            return
+
+        prev_node = self.lst[index - 1]
+        next_node = prev_node.next
+        prev_node.next = new_node
+        new_node.next = next_node
+        self.lst.insert(index, new_node)
 
     def deleteAtIndex(self, index: int) -> None:
-        """
-        Delete the index-th node in the linked list, if the index is valid.
-        """
+        if index < len(self.lst):
+            if index == 0:
+                delete_node = self.head
+                delete_node.next = None
+                self.head = self.head.next
+                self.lst.pop(index)
+                return
+
+            prev_node = self.lst[index - 1]
+            delete_node = prev_node.next
+            prev_node.next = delete_node.next
+            delete_node.next = None
+            self.lst.pop(index)
 
 # Your MyLinkedList object will be instantiated and called as such:
 # obj = MyLinkedList()
