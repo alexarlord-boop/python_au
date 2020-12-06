@@ -74,8 +74,8 @@ class Solution:
         if k1 != k2:
             for nd in mx[k::]:
                 self.result.add_at_tail(nd.val)
-
-        if self.r != 0:
+        # тестами выявил ошибку
+        if self.r != 0 and self.str_to_num(self.result.lst[-1].val) >= 15:
             self.result.add_at_tail(self.num_to_str(self.r))
 
 
@@ -84,3 +84,5 @@ if __name__ == '__main__':
     sol = Solution(HexNumber(params[1]), HexNumber(params[2]))
     sol.add()
     print(sol.result)
+
+# C:\Users\Александр\PycharmProjects\python_au\hexadecimal\hex.py
