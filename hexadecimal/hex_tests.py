@@ -27,3 +27,28 @@ class TestHexNumber(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             test_num = HexNumber("Fad")
+
+
+class TestSolution(unittest.TestCase):
+    def test_str_to_num(self):
+        first, second = HexNumber('1F'), HexNumber('A')
+        test_sol = Solution(first, second)
+
+        self.assertEqual(test_sol.str_to_num('1'), 1)
+        self.assertEqual(test_sol.str_to_num('A'), 10)
+        self.assertEqual(test_sol.str_to_num('F'), 15)
+
+    def test_num_to_str(self):
+        first, second = HexNumber('1F'), HexNumber('A')
+        test_sol = Solution(first, second)
+
+        self.assertEqual(test_sol.num_to_str(1), "1")
+        self.assertEqual(test_sol.num_to_str(10), "A")
+        self.assertEqual(test_sol.num_to_str(15), "F")
+
+    def test_add(self):
+        first, second = HexNumber('1F'), HexNumber('A')
+        test_sol = Solution(first, second)
+        test_sol.add()
+
+        self.assertEqual(str(test_sol.result), '29')
