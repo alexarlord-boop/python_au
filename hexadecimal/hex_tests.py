@@ -50,5 +50,19 @@ class TestSolution(unittest.TestCase):
         first, second = HexNumber('1F'), HexNumber('A')
         test_sol = Solution(first, second)
         test_sol.add()
-
         self.assertEqual(str(test_sol.result), '29')
+
+        first, second = HexNumber('1F'), HexNumber('FF')
+        test_sol = Solution(first, second)
+        test_sol.add()
+        self.assertEqual(str(test_sol.result), '11E')
+
+        first, second = HexNumber('1'), HexNumber('1')
+        test_sol = Solution(first, second)
+        test_sol.add()
+        self.assertEqual(str(test_sol.result), '2')
+
+        first, second = HexNumber('1'), HexNumber('F')
+        test_sol = Solution(first, second)
+        test_sol.add()
+        self.assertEqual(str(test_sol.result), '10')
