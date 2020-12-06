@@ -74,7 +74,6 @@ class Solution:
         if k1 != k2:
             for nd in mx[k::]:
                 self.result.add_at_tail(nd.val)
-        # тестами выявил ошибку
         if self.r != 0 and self.str_to_num(self.result.lst[-1].val) >= 15:
             self.result.add_at_tail(self.num_to_str(self.r))
 
