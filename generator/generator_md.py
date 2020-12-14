@@ -1,3 +1,7 @@
+import sys
+import os
+
+
 class MdSource:
     def __init__(self, title, link, code):
         self.title = title
@@ -19,16 +23,21 @@ class MdSource:
         return f"{self.get_md_title()}\n\n{self.link}\n\n{self.get_md_code()}\n"
 
 
-def read_txt():
-    with open("in.txt") as f:
+def read_txt(filename):
+    with open(filename) as f:
         data = f.readlines()
     res = [data[0], data[1].strip("\n"), "".join(map(lambda x: x[8::], data[6::]))]
     return res
 
 
 def read_md(filename):
-    with open(f"{filename}", "r") as f:
+    data = []
+    if os.path.exists(f"leetcode/{filename}"):
+        f = open(f"leetcode/{filename}")
         data = f.read()
+        f.close()
+    else:
+        open(filename, 'tw').close()
     return data
 
 
@@ -46,7 +55,7 @@ def prepare_data_to_write(md_obj, data):
 
 def write_to_file(filename, data):
     header = f"# {filename.split('.')[0].upper()}\n\n"
-    with open(f"{filename}", "w") as f:
+    with open(f"leetcode/{filename}", "w") as f:
         if header not in data[0]:
             f.write(header)
         f.write(f"{data[0]}")
@@ -54,12 +63,13 @@ def write_to_file(filename, data):
         f.write(data[1])
 
 
-def main():
-    md = MdSource(*read_txt())
-    s = read_md('lists.md')
+def main(src, dst):
+    md = MdSource(*read_txt(src))
+    s = read_md(dst)
     s = prepare_data_to_write(md, s)
-    write_to_file('lists.md', s)
+    write_to_file(dst, s)
 
 
 if __name__ == "__main__":
-    main()
+    params = sys.argv
+    main(params[1], params[2])

@@ -17,4 +17,3 @@ if rev > 2 ** 31 - 1:
     return 0
 return rev if not is_neg else -rev
 ```
-
