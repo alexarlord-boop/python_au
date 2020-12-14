@@ -1,24 +1,7 @@
 # MATH
 
-+ [Palindrome Number](#palindrome-number)
 + [Base 7](#base-7)
 <!---->
-## Palindrome Number
-
-https://leetcode.com/problems/palindrome-number/
-
-```python
-rev = 0
-n = abs(x)
-while n != 0:
-    rev = rev * 10 + n % 10
-    n = n // 10
-if x == rev:
-    return True
-else:
-    return False
-```
-
 ## Base 7
 
 https://leetcode.com/problems/base-7/
@@ -35,6 +18,4 @@ while num != 0:
 if is_negative:
     b = '-' + b
 return str(b)
-
 ```
-
