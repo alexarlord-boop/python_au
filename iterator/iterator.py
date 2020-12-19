@@ -13,6 +13,8 @@ class MyLinkedList:
         self.limit = 0
 
     def __iter__(self):
+        if self.counter != 0:
+            self.counter = 0
         return self
 
     def __next__(self):
@@ -107,9 +109,15 @@ if __name__ == "__main__":
     std_lst.addAtTail(std3)
 
     std_lst.printlist()
+    print('--------')
     # std_lst.printlist()
+    # print('--------')
 
     print(next(std_lst))
     print(next(std_lst))
     print(next(std_lst))
+    print('--------')
+
+    for std in std_lst:
+        print(std)
 
