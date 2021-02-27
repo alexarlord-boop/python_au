@@ -2,9 +2,9 @@ import requests
 import json
 from github import Github
 
-code_words = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
-actions = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
-groups = ['1022', '1021']
+CODE_WORDS = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
+ACTIONS = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
+GROUPS = ['1022', '1021']
 
 
 def get_git_usernames():
@@ -49,11 +49,20 @@ class Validator:
         raw_commits = requests.get(url, headers=self.prepare_headers()).json()
         return raw_commits
 
-    def is_valid_message(self, message):
+    def prepare_comment(self, message):
+        res_comment = list()
         message_parts = message.split()
         code_word_g, action = message_parts[0], message_parts[1]
         code_word, group = code_word_g.split('-')
-        return code_word in code_words and group in groups and action in actions
+
+        if code_word not in CODE_WORDS:
+            res_comment.append(f"! Message must start with code word in {CODE_WORDS}")
+
+        if group not in GROUPS:
+            res_comment.append(f"! Message must contain group number in {GROUPS}")
+
+        if action not in ACTIONS:
+            res_comment.append(f"! Message must start with {ACTIONS}")
 
     def post_pull_comment(self, pull, comment):
         url = f"https://api.github.com/repos/{self.user}/python_au/{pull['id']}/issue_comments"
@@ -62,19 +71,25 @@ class Validator:
         data = 'test comment'
         requests.post(url, data)
 
+    def check_commit_message(self, pull):
+        invalid_commits = list()
+        for commit in self.get_pull_commits(pull):
+            commit_message = commit['commit']['message']
+
+            if not self.prepare_comment(commit_message):
+                invalid_commits.append(commit_message)
+        return invalid_commits
+
+    def check_pulls(self):
+        for pull in self.get_all_pulls():
+            if len(self.check_commit_message(pull)) > 0:
+                self.post_pull_comment(pull, comment)
+
 
 if __name__ == '__main__':
     # usernames = get_git_usernames()
     usernames = ['alexarlord-boop', 'Vasis3038', 'l92169']
 
     validator = Validator(usernames[0])
-    for pull in validator.get_all_pulls():
-        # print(pull)
-        invalid_commits = list()
-        for commit in validator.get_pull_commits(pull):
-            message = commit['commit']['message']
-            if not validator.is_valid_message(message):
-                invalid_commits.append(message)
-        if len(invalid_commits) != 0:
-            validator.post_pull_comment(pull, comment=None)
+
 # id 15
