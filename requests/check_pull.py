@@ -46,6 +46,12 @@ class Validator:
         code_word, group = code_word_g.split('-')
         return code_word in code_words and group in groups and action in actions
 
+    def post_pull_comment(self, pull):
+        url = f"https://api.github.com/repos/{self.user}/python_au/{pull['id']}/issue_comments"
+
+        data = 'test comment'
+        requests.post(url, data)
+
 
 if __name__ == '__main__':
     # usernames = get_git_usernames()
@@ -53,10 +59,12 @@ if __name__ == '__main__':
 
     validator = Validator(usernames[0])
     for pull in validator.get_all_pulls():
+        # print(pull)
         invalid_commits = list()
         for commit in validator.get_pull_commits(pull):
             message = commit['commit']['message']
             if not validator.is_valid_message(message):
                 invalid_commits.append(message)
-        print(invalid_commits)
+        if len(invalid_commits) != 0:
+            validator.post_pull_comment(pull)
 # id 15
