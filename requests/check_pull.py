@@ -15,6 +15,8 @@ class Validator():  # for one user
     def __init__(self, name):
         self.name = name
         self.repos = list()
+        self.get_user_repos()
+        self.curr_repo = None
 
     def get_user_repos(self):
         g = Github()
@@ -25,14 +27,15 @@ class Validator():  # for one user
     def get_spec_repo(self, repo_name):
         for repo in self.repos:
             if repo.name == 'python_au':
-                return repo
+                self.curr_repo = repo
 
 
 if __name__ == '__main__':
     usernames = get_git_names()
     for name in usernames:
         validator = Validator(name)
-        validator.get_user_repos()
+
+
         for rep in validator.repos:
             print(rep)
         print('--------------------')
