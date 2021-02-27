@@ -3,6 +3,7 @@ from github import Github
 
 code_words = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR']
 actions = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
+groups = ['1022', '1021']
 
 
 def get_git_names():
@@ -20,6 +21,7 @@ class Validator:  # for one user
         self.repos = list()
         # self.get_user_repos()
         self.curr_repo = None
+        self.invalid_pulls = list()
         self.TOKEN = 'e94a023059fec44f0283b00f2c9505ab8999ff4b'
 
     # def get_user_repos(self):
@@ -39,22 +41,27 @@ class Validator:  # for one user
             'Accept': "application/vnd.github.v3+json"
         }
 
-    def get_pulls(self, repo_name):
+    def get_invalid_pulls(self, repo_name):
         self.get_spec_repo(repo_name)
         url = f'https://api.github.com/repos/{self.name}/{repo_name}/pulls'
         r = requests.get(url, headers=self.prepare_headers())
         for pull in r.json():
-            if not self.is_valid_pull(pull):
-                print(pull['title'])
-            # print(pull['title'])
+            if not self.is_valid_pull(pull['title']):
+                self.invalid_pulls.append(pull)
 
     def is_valid_pull(self, pull):
-        pass
+        pull_parts = pull.split()
+        code_word_g, action = pull_parts[0], pull_parts[1]
+        code_word, group = code_word_g.split('-')
+        return code_word in code_words and group in groups and action in actions
 
 
 if __name__ == '__main__':
     usernames = get_git_names()
     for name in usernames:
         validator = Validator(name)
-        validator.get_pulls('python_au')
-        print('--------------------')
+        validator.get_invalid_pulls('python_au')
+        print(validator.name)
+        for pull in validator.invalid_pulls:
+            print(pull['title'])
+        print('-'*20)
