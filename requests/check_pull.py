@@ -1,4 +1,5 @@
 import requests
+import json
 from github import Github
 
 code_words = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
@@ -30,6 +31,14 @@ class Validator:
             'Accept': "application/vnd.github.v3+json"
         }
 
+    def prepare_body(self, pull, comment):
+        return {
+            'body': f"{comment}",
+            'path': requests.get(pull['url'] + '/files', headers=self.prepare_headers()).json()[0]['filename'],
+            'position': 1,
+            'commit_id': pull['head']['sha']
+        }
+
     def get_all_pulls(self):
         url = f'https://api.github.com/repos/{self.user}/python_au/pulls'
         pulls = requests.get(url, headers=self.prepare_headers()).json()
@@ -46,9 +55,10 @@ class Validator:
         code_word, group = code_word_g.split('-')
         return code_word in code_words and group in groups and action in actions
 
-    def post_pull_comment(self, pull):
+    def post_pull_comment(self, pull, comment):
         url = f"https://api.github.com/repos/{self.user}/python_au/{pull['id']}/issue_comments"
-
+        r = requests.post(pull['url'] + '/comments', headers=self.prepare_headers(),
+                          data=json.dumps(self.prepare_body(pull, comment)).encode('utf8'))
         data = 'test comment'
         requests.post(url, data)
 
@@ -66,5 +76,5 @@ if __name__ == '__main__':
             if not validator.is_valid_message(message):
                 invalid_commits.append(message)
         if len(invalid_commits) != 0:
-            validator.post_pull_comment(pull)
+            validator.post_pull_comment(pull, comment=None)
 # id 15
