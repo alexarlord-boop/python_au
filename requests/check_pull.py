@@ -1,6 +1,9 @@
 import requests
 from github import Github
 
+code_words = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR']
+actions = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
+
 
 def get_git_names():
     names = list()
@@ -17,7 +20,7 @@ class Validator:  # for one user
         self.repos = list()
         # self.get_user_repos()
         self.curr_repo = None
-        self.TOKEN =
+        self.TOKEN = 'e94a023059fec44f0283b00f2c9505ab8999ff4b'
 
     # def get_user_repos(self):
     #     g = Github()
@@ -41,7 +44,12 @@ class Validator:  # for one user
         url = f'https://api.github.com/repos/{self.name}/{repo_name}/pulls'
         r = requests.get(url, headers=self.prepare_headers())
         for pull in r.json():
-            print(pull['title'])
+            if not self.is_valid_pull(pull):
+                print(pull['title'])
+            # print(pull['title'])
+
+    def is_valid_pull(self, pull):
+        pass
 
 
 if __name__ == '__main__':
