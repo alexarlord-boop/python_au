@@ -1,7 +1,7 @@
 import requests
 from github import Github
 
-code_words = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR']
+code_words = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
 actions = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
 groups = ['1022', '1021']
 
@@ -22,7 +22,7 @@ class Validator:  # for one user
         # self.get_user_repos()
         self.curr_repo = None
         self.invalid_pulls = list()
-        self.TOKEN = 'e94a023059fec44f0283b00f2c9505ab8999ff4b'
+        self.TOKEN =
 
     # def get_user_repos(self):
     #     g = Github()
@@ -58,10 +58,12 @@ class Validator:  # for one user
 
 if __name__ == '__main__':
     usernames = get_git_names()
+    r = requests.post('https://github.com/alexarlord-boop/python_au/pull/33/comment?sticky=true', data='Fixe your pull request.')
+    print(r)
     for name in usernames:
         validator = Validator(name)
         validator.get_invalid_pulls('python_au')
         print(validator.name)
         for pull in validator.invalid_pulls:
             print(pull['title'])
-        print('-'*20)
+            print('-'*20)
