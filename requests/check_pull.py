@@ -70,22 +70,24 @@ class Validator:
         else:
             return None
 
-    def check_commit_message(self, pull):
+    def check_pull_commits(self, pull):
         comments = list()
         self.curr_pull_commits = self.get_pull_commits(pull)
         for commit in self.curr_pull_commits:
             comment = self.prepare_comment(commit['commit']['message'])
             if comment is not None:
                 comments.append(comment)
-                print('\n\n'.join(comments))
         if len(comments) != 0:
+            comments.insert(0, f"* Invalid PULL Commits: *")
+            print('\n\n'.join(comments))
             return '\n\n'.join(comments)
         return ''
 
     def post_pull_comment(self, pull, comment):
         if len(comment) != 0:
-            # url = f"https://api.github.com/repos/{self.user}/python_au/{pull['id']}/issue_comments"
-            r = requests.post(pull['url'] + '/comments', headers=self.prepare_headers(),
+            url = pull['url'] + '/comments'
+            print(url)
+            r = requests.post(url, headers=self.prepare_headers(),
                               data=json.dumps(self.prepare_body(pull, comment)).encode('utf8'))
             print(r.json())
 
@@ -97,6 +99,6 @@ if __name__ == '__main__':
     validator = Validator(usernames[0])
     validator.get_all_pulls()
     for pull in validator.pulls:
-        validator.post_pull_comment(pull, validator.check_commit_message(pull))
+        validator.post_pull_comment(pull, validator.check_pull_commits(pull))
 
 # id 15
