@@ -65,24 +65,29 @@ class Validator:
             res_comment.append(f"! Message must start with {ACTIONS}")
 
         if len(res_comment) != 0:
+            res_comment.insert(0, f"** Invalid Commit Message: {message} **")
             return '\n'.join(res_comment)
-
-    def post_pull_comment(self, pull, comment):
-        if len(comment) != 0:
-            # url = f"https://api.github.com/repos/{self.user}/python_au/{pull['id']}/issue_comments"
-            r = requests.post(pull['url'] + '/comments', headers=self.prepare_headers(),
-                              data=json.dumps(self.prepare_body(pull, comment)).encode('utf8'))
-            # print(r.json())
+        else:
+            return None
 
     def check_commit_message(self, pull):
         comments = list()
         self.curr_pull_commits = self.get_pull_commits(pull)
         for commit in self.curr_pull_commits:
             comment = self.prepare_comment(commit['commit']['message'])
-            if comment != None:
+            if comment is not None:
                 comments.append(comment)
-        # print('\n\n'.join(comments))
-        return '\n\n'.join(comments)
+                print('\n\n'.join(comments))
+        if len(comments) != 0:
+            return '\n\n'.join(comments)
+        return ''
+
+    def post_pull_comment(self, pull, comment):
+        if len(comment) != 0:
+            # url = f"https://api.github.com/repos/{self.user}/python_au/{pull['id']}/issue_comments"
+            r = requests.post(pull['url'] + '/comments', headers=self.prepare_headers(),
+                              data=json.dumps(self.prepare_body(pull, comment)).encode('utf8'))
+            print(r.json())
 
 
 if __name__ == '__main__':
