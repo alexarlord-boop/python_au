@@ -34,6 +34,7 @@ class Validator:
         }
 
     def prepare_body(self, pull, comment):
+        # print(pull['head'])
         return {
             'body': f"{comment}",
             'path': requests.get(pull['url'] + '/files', headers=self.prepare_headers()).json()[0]['filename'],
@@ -99,7 +100,7 @@ if __name__ == '__main__':
     # usernames = get_git_usernames()
     usernames = ['alexarlord-boop', 'Vasis3038', 'l92169']
 
-    validator = Validator(usernames[0], 'pythob_au', 'all')
+    validator = Validator(usernames[0], 'python_au', 'all')
     validator.get_all_pulls()
     for pull in validator.pulls:
         validator.send_pr_comment(pull, validator.check_pull_commits(pull))
