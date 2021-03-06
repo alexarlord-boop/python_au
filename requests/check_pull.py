@@ -49,7 +49,7 @@ class Validator:
         raw_commits = requests.get(url, headers=self.prepare_headers()).json()
         return raw_commits
 
-    def prepare_comment(self, message):
+    def check_prefixes(self, message):
         res_comment = list()
         message_parts = message.split()
         code_word_g, action = message_parts[0], message_parts[1]
@@ -74,7 +74,7 @@ class Validator:
         comments = list()
         self.curr_pull_commits = self.get_pull_commits(pull)
         for commit in self.curr_pull_commits:
-            comment = self.prepare_comment(commit['commit']['message'])
+            comment = self.check_prefixes(commit['commit']['message'])
             if comment is not None:
                 comments.append(comment)
         if len(comments) != 0:
@@ -83,13 +83,13 @@ class Validator:
             return '\n\n'.join(comments)
         return ''
 
-    def post_pull_comment(self, pull, comment):
+    def send_pr_comment(self, pull, comment):
         if len(comment) != 0:
             url = pull['url'] + '/comments'
             print(url)
             r = requests.post(url, headers=self.prepare_headers(),
                               data=json.dumps(self.prepare_body(pull, comment)).encode('utf8'))
-            print(r.json())
+            # print(r.json())
 
 
 if __name__ == '__main__':
@@ -99,6 +99,4 @@ if __name__ == '__main__':
     validator = Validator(usernames[0])
     validator.get_all_pulls()
     for pull in validator.pulls:
-        validator.post_pull_comment(pull, validator.check_pull_commits(pull))
-
-# id 15
+        validator.send_pr_comment(pull, validator.check_pull_commits(pull))
