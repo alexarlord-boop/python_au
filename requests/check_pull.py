@@ -3,7 +3,8 @@ import json
 
 CODE_WORDS = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
 ACTIONS = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
-GROUPS = ['1022', '1021']
+GROUPS = ['1021', '1022']
+TOKEN = '7b605f2a8e8f70298c707d5fe641d462536aa2bd'
 
 
 def get_git_usernames():
@@ -15,92 +16,87 @@ def get_git_usernames():
     return names
 
 
-class Validator:
-    def __init__(self, user, repo_name, state):
-        self.user = user
-        self.repo_name = repo_name
-        self.state = state
-        self.repos = list()
-        self.curr_pull_commits = list()
-        self.TOKEN = 'bd6a331779d1f805f30d1db7eb50bbe131d3a501'
+def prepare_headers():
+    return {
+        'Authorization': 'token {}'.format(TOKEN),
+        'Content-Type': "application/json",
+        'Accept': "application/vnd.github.v3+json"
+    }
 
-        self.pulls = self.get_all_pulls()
 
-    def prepare_headers(self):
-        return {
-            'Autorization': 'token {}'.format(self.TOKEN),
-            'Content-Type': "application/json",
-            'Accept': "application/vnd.github.v3+json"
-        }
+def prepare_body(pull, comment):
+    return {
+        'body': f"{comment}",
+        'path': requests.get(pull['url'] + '/files', headers=prepare_headers()).json()[0]['filename'],
+        'position': 1,
+        'commit_id': pull['head']['sha']
+    }
 
-    def prepare_body(self, pull, comment):
-        # print(pull['head'])
-        return {
-            'body': f"{comment}",
-            'path': requests.get(pull['url'] + '/files', headers=self.prepare_headers()).json()[0]['filename'],
-            'position': 1,
-            'commit_id': pull['head']['sha']
-        }
 
-    def get_all_pulls(self):
-        url = f'https://api.github.com/repos/{self.user}/{self.repo_name}/pulls'
-        pulls = requests.get(url, headers=self.prepare_headers()).json()
-        return pulls
+def get_all_user_prs(user_login, repo_name, pr_state):
+    url = f'https://api.github.com/repos/{user_login}/{repo_name}/pulls'
+    prs = requests.get(url, headers=prepare_headers())
+    print(prs.status_code)
+    return prs.json()
 
-    def get_pull_commits(self, pull):
-        url = pull['commits_url']
-        raw_commits = requests.get(url, headers=self.prepare_headers()).json()
-        return raw_commits
 
-    def check_prefixes(self, message):
-        res_comment = list()
-        message_parts = message.split()
-        code_word_g, action = message_parts[0], message_parts[1]
-        code_word, group = code_word_g.split('-')
+def get_all_pr_commits(pr):
+    return requests.get(pr['commits_url'], headers=prepare_headers()).json()
 
-        if code_word not in CODE_WORDS:
-            res_comment.append(f"! Message must start with code word in {CODE_WORDS}")
 
-        if group not in GROUPS:
-            res_comment.append(f"! Message must contain group number in {GROUPS}")
+def check_prefixes(message):
+    res_comment = list()
+    message_parts = message.split()
+    prefix_parts = message_parts[0].split('-')
+    if len(prefix_parts) == 1:
+        prefix_parts.append('')
+    elif len(prefix_parts) != 2:
+        prefix_parts = ['', '']
+    task, group = prefix_parts
 
-        if action not in ACTIONS:
-            res_comment.append(f"! Message must start with {ACTIONS}")
+    if task not in CODE_WORDS:
+        res_comment.append(f"! Message must start with code word in {CODE_WORDS}")
 
-        if len(res_comment) != 0:
-            res_comment.insert(0, f"** Invalid Commit Message: {message} **")
-            return '\n'.join(res_comment)
-        else:
-            return None
+    if group not in GROUPS:
+        res_comment.append(f"! Message must contain group number in {GROUPS}")
 
-    def check_pull_commits(self, pull):
-        comments = list()
-        self.curr_pull_commits = self.get_pull_commits(pull)
-        for commit in self.curr_pull_commits:
-            comment = self.check_prefixes(commit['commit']['message'])
-            if comment is not None:
-                comments.append(comment)
-        if len(comments) != 0:
-            comments.insert(0, f"* Invalid PULL Commits: *")
-            # print('\n\n'.join(comments))
-            return '\n\n'.join(comments)
-        return ''
+    if len(message_parts) == 1 or message_parts[1] not in ACTIONS:
+        res_comment.append(f"! Message must start with {ACTIONS}")
 
-    def send_pr_comment(self, pull, comment):
-        if len(comment) != 0:
-            url = pull['url'] + '/comments'
+    if len(res_comment) != 0:
+        res_comment.insert(0, f"** Invalid Commit Message: {message} **")
+        return '\n'.join(res_comment)
+    return ''
 
-            r = requests.post(url, headers=self.prepare_headers(),
-                              data=json.dumps(self.prepare_body(pull, comment)).encode('utf8'))
-            print(r.json())
-            print(url)
+
+def verify_pr(pr):
+    comments = list()
+    all_commits = get_all_pr_commits(pr)
+    for commit in all_commits:
+        comment = check_prefixes(commit['commit']['message'])
+        if len(comment) > 0:
+            comments.append(comment)
+    if len(comments) != 0:
+        comments.insert(0, f"# Invalid PULL Commits")
+        print(send_pr_comment(usernames[0], pr, '\n\n'.join(comments)))
+
+
+def send_pr_comment(user, pull, comment):
+    url = pull['url'] + '/comments'
+    r = requests.post(url, headers=prepare_headers(),
+                      data=json.dumps(prepare_body(pull, comment)))
+    return pull['html_url']
 
 
 if __name__ == '__main__':
-    # usernames = get_git_usernames()
+    repo_name = 'python_au'
     usernames = ['alexarlord-boop', 'Vasis3038', 'l92169']
 
-    validator = Validator(usernames[0], 'python_au', 'all')
-    validator.get_all_pulls()
-    for pull in validator.pulls:
-        validator.send_pr_comment(pull, validator.check_pull_commits(pull))
+    for user in usernames:
+        pulls = get_all_user_prs(user, repo_name, 'all')
+        for pr in pulls:
+            verify_pr(pr)
+
+    # pulls = get_all_user_prs(usernames[0], repo_name, 'all')
+    # for pr in pulls:
+    #     verify_pr(pr)
