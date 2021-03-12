@@ -34,9 +34,8 @@ def prepare_body(pull, comment):
 
 
 def get_all_user_prs(user_login, repo_name, pr_state):
-    url = f'https://api.github.com/repos/{user_login}/{repo_name}/pulls'
+    url = f'https://api.github.com/repos/{user_login}/{repo_name}/pulls?state={pr_state}'
     prs = requests.get(url, headers=prepare_headers())
-    print(prs.status_code)
     return prs.json()
 
 
@@ -78,10 +77,10 @@ def verify_pr(pr):
             comments.append(comment)
     if len(comments) != 0:
         comments.insert(0, f"# Invalid PULL Commits")
-        print(send_pr_comment(usernames[0], pr, '\n\n'.join(comments)))
+        send_pr_comment(pr, '\n\n'.join(comments))
 
 
-def send_pr_comment(user, pull, comment):
+def send_pr_comment(pull, comment):
     url = pull['url'] + '/comments'
     r = requests.post(url, headers=prepare_headers(),
                       data=json.dumps(prepare_body(pull, comment)))
@@ -91,12 +90,9 @@ def send_pr_comment(user, pull, comment):
 if __name__ == '__main__':
     repo_name = 'python_au'
     usernames = ['alexarlord-boop', 'Vasis3038', 'l92169']
+    state = 'open'
 
     for user in usernames:
-        pulls = get_all_user_prs(user, repo_name, 'all')
+        pulls = get_all_user_prs(user, repo_name, state)
         for pr in pulls:
             verify_pr(pr)
-
-    # pulls = get_all_user_prs(usernames[0], repo_name, 'all')
-    # for pr in pulls:
-    #     verify_pr(pr)
