@@ -1,10 +1,11 @@
 import requests
 import json
+from datetime import datetime
 
 CODE_WORDS = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
 ACTIONS = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
 GROUPS = ['1021', '1022']
-TOKEN = '7b605f2a8e8f70298c707d5fe641d462536aa2bd'
+TOKEN = '47c6ef9fa1b0e8229d62f4d4481b6a671b1ae19b'
 
 
 def get_git_usernames():
@@ -87,12 +88,53 @@ def send_pr_comment(pull, comment):
     return pull['html_url']
 
 
+def convert_to_date(date):
+    frmt = "%Y-%m-%dT%H:%M:%SZ"
+    return datetime.strptime(date, frmt)
+
+
+def get_comment_date(pr):
+    r = requests.get(pr['review_comments_url']).json()
+    if len(r) > 0:
+        return convert_to_date(r[-1]['created_at'])
+    return None
+
+
+def get_commit_date(commit):
+    return convert_to_date(commit['commit']['author']['date'])
+
+
+def check_new_commits(pr, date):
+    comments = list()
+    all_commits = get_all_pr_commits(pr)
+    for commit in all_commits:
+        if get_commit_date(commit) > date:
+            comment = check_prefixes(commit['commit']['message'])
+            if len(comment) > 0:
+                comments.append(comment)
+
+    if len(comments) != 0:
+        comments.insert(0, f"# Invalid PULL Commits")
+        send_pr_comment(pr, '\n\n'.join(comments))
+    else:
+        print('No new commits')
+
+
 if __name__ == '__main__':
     repo_name = 'python_au'
     usernames = ['alexarlord-boop', 'Vasis3038', 'l92169']
     state = 'open'
 
-    for user in usernames:
-        pulls = get_all_user_prs(user, repo_name, state)
-        for pr in pulls:
+    # for user in usernames:
+    #     pulls = get_all_user_prs(user, repo_name, state)
+    #     for pr in pulls:
+    #         # проверка на наличие комментариев
+    #         verify_pr(pr)
+
+    pulls = get_all_user_prs(usernames[0], repo_name, state)
+    for pr in pulls:
+        comment_date = get_comment_date(pr)
+        if comment_date is not None:
+            check_new_commits(pr, comment_date)
+        else:
             verify_pr(pr)
