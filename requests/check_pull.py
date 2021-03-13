@@ -88,7 +88,7 @@ def send_pr_comment(pull, comment):
     return pull['html_url']
 
 
-def convert_to_date(date):
+def str_to_date(date):
     frmt = "%Y-%m-%dT%H:%M:%SZ"
     return datetime.strptime(date, frmt)
 
@@ -96,12 +96,12 @@ def convert_to_date(date):
 def get_comment_date(pr):
     r = requests.get(pr['review_comments_url']).json()
     if len(r) > 0:
-        return convert_to_date(r[-1]['created_at'])
+        return str_to_date(r[-1]['created_at'])
     return None
 
 
 def get_commit_date(commit):
-    return convert_to_date(commit['commit']['author']['date'])
+    return str_to_date(commit['commit']['author']['date'])
 
 
 def check_new_commits(pr, date):
@@ -116,8 +116,6 @@ def check_new_commits(pr, date):
     if len(comments) != 0:
         comments.insert(0, f"# Invalid PULL Commits")
         send_pr_comment(pr, '\n\n'.join(comments))
-    else:
-        print('No new commits')
 
 
 if __name__ == '__main__':
