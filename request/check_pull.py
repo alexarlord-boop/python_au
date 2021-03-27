@@ -5,7 +5,7 @@ from datetime import datetime
 CODE_WORDS = ['LEETCODE', 'GENERATOR', 'HEXNUMBER', 'TRIANGLE', 'ITERATOR', 'REQUESTS']
 ACTIONS = ['Added', 'Deleted', 'Fixed', 'Refactored', 'Moved']
 GROUPS = ['1021', '1022']
-TOKEN = '47c6ef9fa1b0e8229d62f4d4481b6a671b1ae19b'
+TOKEN = '429088fa5f1fcbb5dbfc41d8e9746c4263b271f0'
 
 
 def get_git_usernames():
@@ -19,9 +19,9 @@ def get_git_usernames():
 
 def prepare_headers():
     return {
-        'Authorization': 'token {}'.format(TOKEN),
-        'Content-Type': "application/json",
-        'Accept': "application/vnd.github.v3+json"
+        "Authorization": 'token {}'.format(TOKEN),
+        "Content-Type": "application/json",
+        "Accept": "application/vnd.github.v3+json"
     }
 
 
@@ -93,10 +93,12 @@ def str_to_date(date):
     return datetime.strptime(date, frmt)
 
 
-def get_comment_date(pr):
+def get_comment_date_by(pr, author):
     r = requests.get(pr['review_comments_url']).json()
+
     if len(r) > 0:
-        return str_to_date(r[-1]['created_at'])
+        if r[-1]['user']['login'] == author:
+            return str_to_date(r[-1]['created_at'])
     return None
 
 
@@ -114,7 +116,7 @@ def check_new_commits(pr, date):
                 comments.append(comment)
 
     if len(comments) != 0:
-        comments.insert(0, f"# Invalid PULL Commits")
+        comments.insert(0, f"# VERIFICATION RESULT: ")
         send_pr_comment(pr, '\n\n'.join(comments))
 
 
@@ -122,6 +124,7 @@ if __name__ == '__main__':
     repo_name = 'python_au'
     usernames = ['alexarlord-boop', 'Vasis3038', 'l92169']
     state = 'open'
+    reviewer = 'alexarlord-boop'
 
     # for user in usernames:
     #     pulls = get_all_user_prs(user, repo_name, state)
@@ -131,7 +134,7 @@ if __name__ == '__main__':
 
     pulls = get_all_user_prs(usernames[0], repo_name, state)
     for pr in pulls:
-        comment_date = get_comment_date(pr)
+        comment_date = get_comment_date_by(pr, reviewer)
         if comment_date is not None:
             check_new_commits(pr, comment_date)
         else:

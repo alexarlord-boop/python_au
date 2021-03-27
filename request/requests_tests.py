@@ -29,5 +29,3 @@ class TestGetUserPrs(unittest.TestCase):
         with open('test_data.txt') as f:
             test_prs = json.loads(f.read())
         self.assertEqual(prs, test_prs)
-
-
