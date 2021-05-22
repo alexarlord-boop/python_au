@@ -3,6 +3,7 @@
 + [Min Stack](#min-stack)
 + [Implement Queue using Stacks](#implement-queue-using-stacks)
 + [Implement Stack using Queues](#implement-stack-using-queues)
++ [Design Twitter](#design-twitter)
 <!---->
 ## Min Stack
 
@@ -109,4 +110,28 @@ def empty(self) -> bool:
     """
     return not self.q1 and not self.q2
 ```
+
+## Design Twitter
+
+https://leetcode.com/problems/design-twitter/
+
+```python
+def __init__(self):
+    self.x = 0
+    self.t = defaultdict(list)
+    self.f = defaultdict(set)
+
+def postTweet(self, uid: int, tid: int) -> None:
+    self.x += 1;self.t[uid].append((self.x, tid))
+
+def getNewsFeed(self, uid: int) -> List[int]:
+    m = self.t[uid].copy()
+    for _uid in self.f[uid]: m.extend(self.t[_uid])
+    return [x[1] for x in sorted(m, key=lambda x: -x[0])][:10]
+
+def follow(self, fid: int, feid: int) -> None:
+    self.f[fid].add(feid)
+
+def unfollow(self, fid: int, feid: int) -> None:
+    if feid in self.f[fid]: self.f[fid].remove(feid)```
 
